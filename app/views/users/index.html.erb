@@ -1,0 +1,19 @@
+<div class="main users-index">
+  <div class="container-set">
+    <h1 class="form-heading">社員一覧</h1>
+
+    <%if @current_user.admin_flg=="1"%>
+      <%= form_tag("/users/import", multipart: true) do %>
+        <%= file_field_tag :file %>
+        <%= submit_tag "インポート" %>
+      <% end %>
+    <%end%>
+    <% @users.each do |user| %>
+      <div class="posts-index-item">
+          <div class="user-center">
+            <%= link_to(user.emp_name, controller: :users, action: :show, emp_code: user.emp_code) %>
+          </div>
+      </div>
+    <% end %>
+  </div>
+</div>

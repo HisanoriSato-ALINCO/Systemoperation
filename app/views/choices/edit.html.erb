@@ -1,0 +1,52 @@
+<h1>Editing Choice</h1>
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">選択肢編集</h1>
+        <%@operation.op_code%>
+        <div class="form-top">
+            <div class="form-body">
+                <div class="form-error">
+                </div>
+                <!--親オペレーションの表示-->
+                <%if @operation%>
+                    <%= link_to(@operation.op_name, {controller: :operations, action: :edit, id: @operation.id})%>
+                <%end%>
+            </div>
+        </div>
+        <div class="form">
+            <div class="form-body">
+            <% @operation.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+
+            <!--選択肢(テキスト)-->
+            <p class="item-name">選択肢</p>
+            <br>
+            
+            <%= form_tag({controller: :choices, action: :create, op_code: @operation.op_code}, {id: "sub",multipart: true}) do %>
+            <input type="text" name="choice_name" value="<%= @choice.choice_name %>">
+            <input type="submit" value="新規作成">
+            <%end%>
+            <br>
+            <br>
+            
+            <% @choices.each do |choice| %>
+                <%= form_tag({controller: :choices, action: :update, op_code: @operation.op_code,id: choice.id }, {id: "sub",multipart: true}) do %>
+                        <input type="text" name="choice_name" value="<%= choice.choice_name %>">
+                        <%= link_to("削除", {controller: :choices, action: :destroy, op_code: @operation.op_code,id: choice.id }, {method: "post"})%>
+                        <%
+=begin%>
+ <%= link_to("削除", {controller: :sheets, action: :destroy ,id: @sheet.id }, {method: "post"})%>  
+<%
+=end%>
+                        <input type="submit" value="更新"> 
+                <%end%>
+                <br>
+            <%end%>
+            </div>
+        </div>
+    </div>
+</div>

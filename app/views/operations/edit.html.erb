@@ -1,0 +1,568 @@
+<h1>Edit Operation</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+
+    <div class="container">
+        <%= link_to '戻る', {controller: :operations, action: :index} %>
+        <h1 class="form-heading">編集</h1>
+        <%@operation.op_code%>
+        <%= form_tag({controller: :operations, action: :update, id: @operation.id}, {id: "sub",multipart: true}) do %>
+        <div class="form-top">
+            <div class="form-body">
+                <div class="form-error">
+                </div>
+                <!--オペレーションコードを紐付けて新規設定の作成-->
+                <%= link_to '関連設定作成', {controller: :settings, action: :new, op_code: @operation.op_code} %>
+                <div class="division">
+                <ul>
+                    <% @settings.each do |setting| %>
+                        <li>
+                            <%= link_to(setting.set_name, controller: :settings, action: :edit, id: setting.id, op_code: @operation.op_code) %>
+                        </li>
+                    <%end%> 
+                </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form">
+            <div class="form-body">
+            <% @operation.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <!--オペレーションコード(テキスト)-->
+            <p class="item-name">オペレーションコード</p><p class="ness">変更不可</p>
+            <br>
+            <input type="text" name="op_code" value="<%= @operation.op_code %>" readonly="readonly">
+            <br>
+            <br>
+            <!--オペレーション名(テキスト)-->
+            <p class="item-name">オペレーション名</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="op_name" value="<%= @operation.op_name %>">
+            <br>
+            <br>
+<%
+=begin%>
+ 
+            <!--並び順(数値)-->
+            <p class="item-name">並び順</p><p class="ness">*</p>
+            <br>
+            <input type="number" name="op_num" value="<%= @operation.op_num %>">
+            <br>
+            <br> 
+<%
+=end%>
+
+            <!--入力属性(コンボボックス)-->
+            <p class="item-name">入力属性</p><p class="ness">*</p>
+            <br>
+            <select name="op_type">
+                <% if @operation.op_type == "0" || @operation.op_type == nil %>
+                    <option value="0" selected>打刻のみ</option>
+                <%else%>
+                    <option value="0" >打刻のみ</option>
+                <%end%>
+
+                <% if @operation.op_type == "1" %>
+                    <option value="1" selected >数値(整数)</option>
+                <%else%>
+                    <option value="1">数値(整数)</option>
+                <%end%>
+
+                <% if @operation.op_type == "2" %>
+                    <option value="2" selected>数値(小数)</option>
+                <%else%>
+                    <option value="2">数値(小数)</option>
+                <%end%>
+
+                <% if @operation.op_type == "3" %>
+                    <option value="3" selected>テキスト</option>
+                <%else%>
+                    <option value="3">テキスト</option> 
+                <%end%>
+
+                <% if @operation.op_type == "4" %>
+                    <option value="4" selected>日付</option>
+                <%else%>
+                    <option value="4">日付</option>
+                <%end%>
+
+                <% if @operation.op_type == "5" %>
+                    <option value="5" selected>時刻</option>
+                <%else%>
+                    <option value="5">時刻</option>
+                <%end%>
+
+                <% if @operation.op_type == "6" %>
+                    <option value="6" selected>テキストエリア</option>
+                <%else%>
+                    <option value="6">テキストエリア</option>
+                <%end%>
+
+                <% if @operation.op_type == "7" %>
+                    <option value="7" selected>選択肢</option>
+                <%else%>
+                    <option value="7">選択肢</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+
+            <!--対象当番区分(コンボボックス)-->
+            <p class="item-name">対象当番区分</p><p class="ness">*</p>
+            <br>
+            <select name="duty_div">
+                <% if @operation.duty_div == "1.A当番" || @operation.duty_div == nil %>
+                    <option value="1.A当番" selected>1.A当番</option>
+                <%else%>
+                    <option value="1.A当番" >1.A当番</option>
+                <%end%>
+
+                <% if @operation.duty_div == "2.C当番" %>
+                    <option value="2.C当番" selected >2.C当番</option>
+                <%else%>
+                    <option value="2.C当番">2.C当番</option>
+                <%end%>
+
+                <% if @operation.duty_div == "3.月次当番" %>
+                    <option value="3.月次当番" selected>3.月次当番</option>
+                <%else%>
+                    <option value="3.月次当番">3.月次当番</option>
+                <%end%>
+
+                <% if @operation.duty_div == "0.請求当番" %>
+                    <option value="0.請求当番" selected>0.請求当番</option>
+                <%else%>
+                    <option value="0.請求当番">0.請求当番</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+
+            <%
+=begin%>
+ <!--作業区分(コンボボックス)-->
+            <p class="item-name">作業区分</p><p class="ness">*</p>
+            <br>
+            <select name="op_div">
+                <% if @operation.op_div == "0" || @operation.op_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.op_div == "1" %>
+                    <option value="1" selected >情報課作業</option>
+                <%else%>
+                    <option value="1">情報課作業</option>
+                <%end%>
+
+                <% if @operation.op_div == "2" %>
+                    <option value="2" selected>販売延長</option>
+                <%else%>
+                    <option value="2">販売延長</option>
+                <%end%>
+
+                <% if @operation.op_div == "3" %>
+                    <option value="3" selected>拡張項目</option>
+                <%else%>
+                    <option value="3">拡張項目</option>
+                <%end%>
+            </select> 
+
+            <br>
+            <br> 
+<%
+=end%>
+
+            <p class="item-name">操作システム</p><p class="ness">*</p>
+            <br>
+            <!--プルダウンリスト-->
+            <% if @osystem%>
+            <%= collection_select(:osystem,:osys_code, @osystems, :osys_code, :osys_name,:prompt => "#{@osystem.osys_name}") %>
+            <%else%>
+            <%= collection_select(:osystem,:osys_code, @osystems, :osys_code, :osys_name,:prompt => "選択して下さい") %>
+            <%end%>
+            <br><br> 
+
+            <!--必須フラグ(チェックボックス))-->
+            <p class="item-name">必須フラグ</p><p class="ness">*</p>
+            <br>
+            <div class="form-checkbox">
+                <% if @operation.must_flg == "1" || @operation.must_flg == nil %>
+                    <input name="must_flg" type="hidden" value="0" />
+                    <input class="custom-checkbox" type="checkbox" value="1" name="must_flg" checked="checked"/>
+                <%else%>
+                    <input name="must_flg" type="hidden" value="0" />
+                    <input class="custom-checkbox" type="checkbox" value="1" name="must_flg" />
+                <%end%>
+            </div>
+            <br>
+
+            <div class="div-select">
+            <!--区分(コンボボックス)-->
+            <p class="item-name">請求区分</p><p class="ness">*</p>
+            <br>
+            <select name="inv_div">
+                <% if @operation.inv_div == "0" || @operation.inv_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.inv_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.inv_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">締区分</p><p class="ness">*</p>
+            <br>
+            <select name="cf_div">
+                <% if @operation.cf_div == "0" || @operation.cf_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.cf_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.cf_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">会計締区分</p><p class="ness">*</p>
+            <br>
+            <select name="ac_div">
+                <% if @operation.ac_div == "0" || @operation.ac_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.ac_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.ac_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">月初翌区分</p><p class="ness">*</p>
+            <br>
+            <select name="bigm_div">
+                <% if @operation.bigm_div == "0" || @operation.bigm_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.bigm_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.bigm_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">運賃締区分</p><p class="ness">*</p>
+            <br>
+            <select name="fare_div">
+                <% if @operation.fare_div == "0" || @operation.fare_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.fare_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.fare_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">月次区分</p><p class="ness">*</p>
+            <br>
+            <select name="mnth_div">
+                <% if @operation.mnth_div == "0" || @operation.mnth_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.mnth_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.mnth_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">月次翌区分</p><p class="ness">*</p>
+            <br>
+            <select name="mnxt_div">
+                <% if @operation.mnxt_div == "0" || @operation.mnxt_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.mnxt_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.mnxt_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">販売延長区分</p><p class="ness">*</p>
+            <br>
+            <select name="gex_div">
+                <% if @operation.gex_div == "0" || @operation.gex_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.gex_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.gex_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">臨時区分</p><p class="ness">*</p>
+            <br>
+            <select name="tmp_div">
+                <% if @operation.tmp_div == "0" || @operation.tmp_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.tmp_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+            <br>
+<%
+=begin%>
+ 
+            <!--区分(コンボボックス)-->
+            <div class="div-select">
+            <p class="item-name">拡張項目区分</p><p class="ness">*</p>
+            <br>
+            <select name="ex_div">
+                <% if @operation.ex_div == "0" || @operation.ex_div == nil %>
+                    <option value="0" selected>通常</option>
+                <%else%>
+                    <option value="0" >通常</option>
+                <%end%>
+
+                <% if @operation.ex_div == "1" %>
+                    <option value="1" selected >追加</option>
+                <%else%>
+                    <option value="1">追加</option>
+                <%end%>
+
+                <% if @operation.ex_div == "2" %>
+                    <option value="2" selected>減少</option>
+                <%else%>
+                    <option value="2">減少</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            </div>
+            <br> 
+<%
+=end%>
+
+            <!--コマンド(テキスト)-->
+
+            <p class="item-name">コマンド</p>
+            <br>
+            <input type="text" name="command" value="<%= @operation.command %>">
+            <br>
+            <br>
+
+            <!--注意事項(テキスト)-->
+            <p class="item-name">注意事項</p>
+            <br>
+            <input type="text" name="caution" value="<%= @operation.caution %>">
+            <br>
+            <br>
+            <!--選択肢枠(テキスト)-->
+            <% if @operation.op_type == "7" %>
+                <p class="item-name">選択肢</p>
+                <% @choices.each do |choice| %>
+                        <div class = "settings-list">
+                            <input type="text" name="choice_name" value="<%= choice.choice_name %>" readonly = "readonly">
+                        </div>
+                <%end%>
+                <%= link_to("選択肢編集", controller: :choices, action: :edit,op_code: @operation.op_code) %> 
+                <br>
+                <br>
+            <%end%>
+
+            <!--表示キー項目コード(テキスト)-->
+            <p class="item-name">表示キー項目コード</p>
+            <br>
+            <input type="text" name="branch_code" value="<%= @operation.branch_code %>">
+            <%@branch_op = Operation.find_by(op_code: @operation.branch_code)%>
+            <%if @branch_op%>
+                結果：<%=@branch_op.op_name%>⇒No.<%=@branch_op.op_num%>
+            <%end%>
+            <br>
+            <br>
+
+            <!--表示キー項目内容(テキスト)-->
+            <p class="item-name">表示キー項目内容</p>
+            <br>
+            <input type="text" name="branch_cont" value="<%= @operation.branch_cont %>">
+            <%if @branch_op%>
+                <%@choices = Choice.where(op_code: @branch_op.op_code)%>
+                <%if @choices[0]%>
+                候補：
+                    <%@choices.each do |choice|%>
+                    <%=choice.choice_name%>
+                    <%end%>
+                <%end%>
+            <%end%>
+            <br>
+            <br>
+
+            <!--表示設定キー項目コード(テキスト)-->
+            <p class="item-name">表示設定キー項目コード</p>
+            <br>
+            <input type="text" name="sbranch_code" value="<%= @operation.sbranch_code %>">
+            <%@branch_set = Setting.find_by(set_code: @operation.sbranch_code)%>
+            <%if @branch_set%>
+                結果：<%=@branch_set.set_name%>
+            <%end%>
+            <br>
+            <br>
+
+            <!--表示設定キー項目内容(テキスト)-->
+            <p class="item-name">表示設定キー項目内容</p>
+            <br>
+            <input type="text" name="sbranch_cont" value="<%= @operation.sbranch_cont %>">
+            <%if @branch_set%>
+                <%@choices = Choice.where(set_code: @branch_set.set_code)%>
+                <%if @choices[0]%>
+                候補：
+                    <%@choices.each do |choice|%>
+                    <%=choice.choice_name%>
+                    <%end%>
+                <%end%>
+            <%end%>
+            <br>
+            <br> 
+
+
+
+            <input type="submit" value="更新">
+            </div>
+        </div>
+        <% end %>
+        <%= link_to("削除", {controller: :operations, action: :destroy,id: @operation.id }, {method: "post"})%>
+
+    </div>
+    
+</div>

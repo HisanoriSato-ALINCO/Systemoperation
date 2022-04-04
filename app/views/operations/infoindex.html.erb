@@ -1,0 +1,100 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Operations</h1>
+<br>
+
+<div class="main users-index">
+  <div class="container">
+    <div class="link-btn">
+    <%= link_to '通常オペレーション', operations_index_path %>
+    </div>
+    <h1 class="form-heading">情報課オペレーション一覧</h1>
+<%
+=begin%>
+    <%= form_tag({controller: :operations, action: :import}, multipart: true) do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "インポート" %>
+    <% end %> 
+<%
+=end%>
+    <div class="link-btn">
+    <%= link_to '新規情報課作業', operations_infonew_path %>
+    </div>
+    <% @operations.each do |operation| %>
+          <div class="users-index-item">
+            <div class="user-left">
+              <%= operation.op_num %> 
+            </div>
+            <div class="user-center">
+              <%= link_to(operation.op_name, controller: :operations, action: :infoedit, id: operation.id) %>
+              <!--関連設定を取得-->
+                <%@settings = Setting.where(op_code: operation.op_code)%>
+                <% @settings.each do |setting|%>
+                  <div class= "command">
+                  <%= setting.set_name%>
+                  </div>
+                <%end%>
+            </div>
+            <div class="user-right">
+            <!--フラグを表示-->
+              <%if operation.inv_div != "0"%>
+                <%if operation.inv_div == "1"%>
+                  <div class="add">請求+</div>
+                <%elsif operation.inv_div == "2"%>
+                  <div class="dec">請求-</div>
+                <%end%>
+              <%end%>
+              <%if operation.cf_div != "0"%>
+                <%if operation.cf_div == "1"%>
+                  <div class="add">締+</div>
+                <%elsif operation.cf_div == "2"%>
+                  <div class="dec">締-</div>
+                <%end%>
+              <%end%>
+              <%if operation.ac_div != "0"%>
+                <%if operation.ac_div == "1"%>
+                  <div class="add">会締+</div>
+                <%elsif operation.ac_div == "2"%>
+                  <div class="dec">会締-</div>
+                <%end%>
+              <%end%>
+              <%if operation.fare_div != "0"%>
+                <%if operation.fare_div == "1"%>
+                  <div class="add">運締+</div>
+                <%elsif operation.fare_div == "2"%>
+                  <div class="dec">運締-</div>
+                <%end%>
+              <%end%>
+              <%if operation.bigm_div != "0"%>
+                <%if operation.bigm_div == "1"%>
+                  <div class="add">月初+</div>
+                <%elsif operation.bigm_div == "2"%>
+                  <div class="dec">月初-</div>
+                <%end%>
+              <%end%>
+              <%if operation.mnth_div != "0"%>
+                <%if operation.mnth_div == "1"%>
+                  <div class="add">月次+</div>
+                <%elsif operation.mnth_div == "2"%>
+                  <div class="dec">月次-</div>
+                <%end%>
+              <%end%>
+              <%if operation.mnxt_div != "0"%>
+                <%if operation.mnxt_div == "1"%>
+                  <div class="add">月翌+</div>
+                <%elsif operation.mnxt_div == "2"%>
+                  <div class="dec">月翌-</div>
+                <%end%>
+              <%end%>
+              <%if operation.tmp_div != "0"%>
+                <%if operation.tmp_div == "1"%>
+                  <div class="add">臨時+</div>
+                <%elsif operation.tmp_div == "2"%>
+                  <div class="dec">臨時-</div>
+                <%end%>
+              <%end%>
+              </div>
+          </div>
+        <% end %> 
+  </div>
+</div>

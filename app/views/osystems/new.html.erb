@@ -1,0 +1,38 @@
+<h1>New Opssytem</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">新規作成</h1>
+        <%= form_tag(osystems_create_path,id: "sub") do %>
+        <div class="form">
+            <div class="form-body">
+            <% @osystem.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <%
+=begin%>
+ <!--オペレーションコード(テキスト)-->
+            <p class="item-name">操作システムコード</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="osys_code" value="<%= @osystem.osys_code %>">
+            <br>
+            <br> 
+<%
+=end%>
+            <!--オペレーション名(テキスト)-->
+            <p class="item-name">操作システム名</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="osys_name" value="<%= @osystem.osys_name %>">
+            <br>
+            <br>
+            <input type="submit" value="作成">
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

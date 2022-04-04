@@ -1,0 +1,89 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+@import 'application';
+
+/* ローディング画面(2重処理防止) */
+#loading{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 9000;
+}
+
+#animation{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    animation: flush 1s linear 0s infinite;
+}
+
+.loading-circle{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border-top: 10px solid #fff;
+    border-bottom: 10px solid #fff;
+    border-left: 10px solid #fff;
+    border-right: 10px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear 0s infinite;
+}
+
+@keyframes flush{
+    0%{
+    opacity: 0;
+    }
+    25%{
+    opacity: 0.5;
+    }
+    50%{
+    opacity: 1;
+    }
+    75%{
+    opacity: 0.5;
+    }
+    100%{
+    opacity: 0;
+    }
+}
+
+@keyframes spin{
+    0%{
+    transform: rotate(0deg);
+    }
+    25%{
+    transform: rotate(90deg);
+    }
+    50%{
+    transform: rotate(180deg);
+    }
+    75%{
+    transform: rotate(270deg);
+    }
+    100%{
+    transform: rotate(360deg);
+    }
+}
+
+p{
+    margin-bottom: 0;
+}

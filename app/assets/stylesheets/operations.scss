@@ -1,0 +1,83 @@
+// Place all the styles related to the Operations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+//pタグを横並びに(必須項目*の色変え)
+p {
+    display: inline-block;
+    }
+//項目名
+.item-name{
+    color: #717880;
+    font-size: 15px;
+    }
+//必須項目に挿入する*
+.ness{
+    color: #fa5656;
+    font-size: 15px;
+    }
+
+//選択肢を横並びに
+.div-select{
+    display: inline-block;
+    width: 130px;
+}
+
+//フォームの表示位置変王
+.container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    clear: both;
+}
+
+.container-right {
+    max-width: 250px;
+    padding-left: 10px;
+    padding-right: 10px;
+    clear: both;
+}
+
+.form {
+    max-width: 1000px;
+//    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 2px 6px #c1ced7;
+}
+
+.form-top {
+    max-width: 1000px;
+//    margin: 0 auto;
+    background-color: rgb(243, 243, 243);
+    box-shadow: 0 4px 6px #c1ced7;
+}
+
+.form-set {
+    max-width: 900px;
+    //margin: 0 auto;
+    background-color: white;
+}
+
+.form-heading {
+font-weight: 300;
+margin: 60px 0 20px;
+font-size: 48px;
+color: #bcc8d4;
+display: none;
+}
+
+.form-body {
+padding: 30px;
+}
+
+.form-body-set {
+padding: 5px;
+}
+
+.form-body a{
+font-weight: 600;
+font-size: 20px;
+}
+
+
+

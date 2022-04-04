@@ -1,0 +1,174 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Operations</h1>
+<br>
+
+<%= link_to 'New Operation', operations_new_path %>
+
+<div class="main users-index">
+  <div class="container">
+    <div class="link-btn">
+    <%= link_to '情報課オペレーション', operations_infoindex_path %>
+    </div>
+    
+    <h1 class="form-heading">オペレーション一覧</h1>
+    <%
+=begin%>
+ <%= link_to("reset", {controller: :operations, action: :opreset }, {method: "post"})%> 
+<%
+=end%>
+    <br>
+    <div class="right">
+      <div class= "link-btn">
+      <%= link_to '新規作成', operations_new_path %>
+      </div>
+    </div>
+    <div class="search-btn">
+    <%= link_to"請求当番", operations_index_path(duty: "0.請求当番") %>
+    <%= link_to"Ａ当番", operations_index_path(duty: "1.A当番") %>
+    <%= link_to"Ｃ当番", operations_index_path(duty: "2.C当番") %>
+    <%= link_to"月次当番", operations_index_path(duty: "3.月次当番") %>
+    <%= link_to"クリア", operations_index_path(duty: nil) %>
+    </div>
+
+    <div class="search-btn">
+    <%count = 0%>
+    <% @divs.each do |div|%>
+      <% div_flg = div + "_div"%>
+      <% div_name = @div_names[count]%>
+      <%= link_to"#{div_name}", operations_index_path(div: div_flg,duty: @duty_div) %>
+      <% count = count + 1%>
+    <%end%>
+    <%= link_to"クリア", operations_index_path(div: nil,duty: @duty_div) %>
+
+    </div>
+<%
+=begin%>
+ 
+    <%= form_tag({controller: :operations, action: :import}, multipart: true) do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "インポート" %>
+    <% end %> 
+<%
+=end%>
+    <!--ソート用ul追加-->
+      <ul id="sortable_list">
+        
+      <% @operations.each do |operation| %>
+        <% if operation.duty_div != "4.情報課作業"%>
+          <li>  
+            <div class="users-index-item">
+              <div class="user-left">
+                <%= operation.op_num %> 
+                
+              </div>
+              <div class="user-center">
+                <%if operation.duty_div%>
+                  <p class = "dutys">
+                  <%= operation.duty_div.slice(2,20)%>
+                  </p>
+                  
+                <%end%>
+                <%= link_to(operation.op_name, controller: :operations, action: :edit, id: operation.id) %>
+                <%osystem = Osystem.find_by(osys_code: operation.osys_code)%>
+                  <p class= "supplement">
+                  <%= osystem.osys_name%>
+                  </p>
+                <!--関連設定を取得-->
+                <%@settings = Setting.where(op_code: operation.op_code)%>
+                <% @settings.each do |setting|%>
+                  <div class= "command">
+                  関連設定：
+                  <%= link_to(setting.set_name, controller: :settings, action: :edit, id: setting.id,op_code: operation.op_code) %>
+                  </div>
+                <%end%>
+                <%if operation.op_num == 0%>
+                  <div class="caution">
+                  並び順を指定して下さい
+                  </div>
+                <%end%>
+                
+
+                
+              </div>
+              <div class="user-right">
+              <!--フラグを表示-->
+                <%if operation.inv_div != "0"%>
+                  <%if operation.inv_div == "1"%>
+                    <div class="add">請求+</div>
+                  <%elsif operation.inv_div == "2"%>
+                    <div class="dec">請求-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.cf_div != "0"%>
+                  <%if operation.cf_div == "1"%>
+                    <div class="add">締+</div>
+                  <%elsif operation.cf_div == "2"%>
+                    <div class="dec">締-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.ac_div != "0"%>
+                  <%if operation.ac_div == "1"%>
+                    <div class="add">会締+</div>
+                  <%elsif operation.ac_div == "2"%>
+                    <div class="dec">会締-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.fare_div != "0"%>
+                  <%if operation.fare_div == "1"%>
+                    <div class="add">運締+</div>
+                  <%elsif operation.fare_div == "2"%>
+                    <div class="dec">運締-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.bigm_div != "0"%>
+                  <%if operation.bigm_div == "1"%>
+                    <div class="add">月初+</div>
+                  <%elsif operation.bigm_div == "2"%>
+                    <div class="dec">月初-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.mnth_div != "0"%>
+                  <%if operation.mnth_div == "1"%>
+                    <div class="add">月次+</div>
+                  <%elsif operation.mnth_div == "2"%>
+                    <div class="dec">月次-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.mnxt_div != "0"%>
+                  <%if operation.mnxt_div == "1"%>
+                    <div class="add">月翌+</div>
+                  <%elsif operation.mnxt_div == "2"%>
+                    <div class="dec">月翌-</div>
+                  <%end%>
+                <%end%>
+                <%if operation.tmp_div != "0"%>
+                  <%if operation.tmp_div == "1"%>
+                    <div class="add">臨時+</div>
+                  <%elsif operation.tmp_div == "2"%>
+                    <div class="dec">臨時-</div>
+                  <%end%>
+                <%end%>
+                </div>
+
+                
+                
+                
+
+              <% @max = @operation_last.op_num %>
+              <div class="user-right-edge">
+                  <div class="num">
+                  <%= form_tag({controller: :operations, action: :set_num, id: operation.id}, {id: "sub",multipart: true}) do %>
+                  <input type="number" name="num" value=""  min= "1" max= <%="#{@max}"%> required >
+                  <input type="submit" value="移動">
+                  <%end%>
+                  </div>
+                </div>
+            </div>
+          </li>
+        <%end%>
+      <% end %> 
+        
+      </ul>
+  </div>
+</div>

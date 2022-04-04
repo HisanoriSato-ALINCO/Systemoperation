@@ -1,0 +1,320 @@
+<h1>Editing Setting</h1>
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        
+        <%= link_to("戻る", {controller: :operations, action: :edit, id: @operation.id})%>
+        <h1 class="form-heading">編集</h1>
+        <%= form_tag({controller: :settings, action: :update, op_code: @operation.op_code ,id: @setting.id}, {id: "sub",multipart: true}) do %>
+        <div class="form">
+            <div class="form-body">
+            <% @setting.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <!--関連オペレーションを表示-->
+            <%if @operation%>
+            <div class="division">
+                <ul>
+                <li>
+                <%= link_to(@operation.op_name, {controller: :operations, action: :edit, id: @operation.id})%>
+                </li>
+                </ul>
+            </div>
+            <%end%>
+            <br>
+
+            <!--設定コード(テキスト)-->
+            <p class="item-name">設定コード</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="set_code" value="<%= @setting.set_code %>" readonly="readonly">
+            <br>
+            <br> 
+
+            <!--設定名(テキスト)-->
+            <p class="item-name">設定名</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="set_name" value="<%= @setting.set_name %>">
+            <br>
+            <br>
+            <!--並び順(数値)-->
+            <p class="item-name">並び順</p><p class="ness">*</p>
+            <br>
+            <input type="number" name="set_num" value="<%= @setting.set_num %>">
+            <br>
+            <br>
+            <!--入力属性(コンボボックス)-->
+            <p class="item-name">入力属性</p><p class="ness">*</p>
+            <br>
+            <select name="set_type">
+                <% if @setting.set_type == "0" || @setting.set_type == nil %>
+                    <option value="0" selected>打刻のみ</option>
+                <%else%>
+                    <option value="0" >打刻のみ</option>
+                <%end%>
+
+                <% if @setting.set_type == "1" %>
+                    <option value="1" selected >数値(整数)</option>
+                <%else%>
+                    <option value="1">数値(整数)</option>
+                <%end%>
+
+                <% if @setting.set_type == "2" %>
+                    <option value="2" selected>数値(小数)</option>
+                <%else%>
+                    <option value="2">数値(小数)</option>
+                <%end%>
+
+                <% if @setting.set_type == "3" %>
+                    <option value="3" selected>テキスト</option>
+                <%else%>
+                    <option value="3">テキスト</option> 
+                <%end%>
+
+                <% if @setting.set_type == "4" %>
+                    <option value="4" selected>日付</option>
+                <%else%>
+                    <option value="4">日付</option>
+                <%end%>
+
+                <% if @setting.set_type == "5" %>
+                    <option value="5" selected>時刻</option>
+                <%else%>
+                    <option value="5">時刻</option>
+                <%end%>
+
+                <% if @setting.set_type == "6" %>
+                    <option value="6" selected>テキストエリア</option>
+                <%else%>
+                    <option value="6">テキストエリア</option>
+                <%end%>
+
+                <% if @setting.set_type == "7" %>
+                    <option value="7" selected>選択肢</option>
+                <%else%>
+                    <option value="7">選択肢</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+
+            <!--対象当番区分(コンボボックス)-->
+            <p class="item-name">設定値区分</p><p class="ness">*</p>
+            <br>
+            <select name="set_div">
+                <% if @setting.set_div == "0"  %>
+                    <option value="0" selected>その他</option>
+                <%else%>
+                    <option value="0" >その他</option>
+                <%end%>
+
+                <% if @setting.set_div == "1" || @setting.set_div == nil%>
+                    <option value="1" selected >処理日付</option>
+                <%else%>
+                    <option value="1">処理日付</option>
+                <%end%>
+
+                <% if @setting.set_div == "2" %>
+                    <option value="2" selected>開始日</option>
+                <%else%>
+                    <option value="2">開始日</option>
+                <%end%>
+
+                <% if @setting.set_div == "3" %>
+                    <option value="3" selected>終了日</option>
+                <%else%>
+                    <option value="3">終了日</option>
+                <%end%>
+
+                <% if @setting.set_div == "4" %>
+                    <option value="4" selected>年</option>
+                <%else%>
+                    <option value="4">年</option>
+                <%end%>
+
+                <% if @setting.set_div == "5" %>
+                    <option value="5" selected>月</option>
+                <%else%>
+                    <option value="5">月</option>
+                <%end%>
+
+                <% if @setting.set_div == "6" %>
+                    <option value="6" selected>日</option>
+                <%else%>
+                    <option value="6">日</option>
+                <%end%>
+
+                <% if @setting.set_div == "7" %>
+                    <option value="7" selected>期</option>
+                <%else%>
+                    <option value="7">期</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+
+            <!--管理システムコード(テキスト)--><!--本番は選択式-->
+            <p class="item-name">管理システムコード</p><p class="ness">*</p>
+            <br>
+            <%if @msystem%>
+            <%= collection_select(:msystem,:msys_code, @msystems, :msys_code, :msys_name,:prompt => "#{@msystem.msys_name}") %>
+            <%else%>
+            <%= collection_select(:msystem,:msys_code, @msystems, :msys_code, :msys_name,:prompt => "選択してください") %>
+            <%end%>
+            <br>
+            <br>
+
+            <!--必須フラグ(チェックボックス))-->
+            <p class="item-name">必須フラグ</p><p class="ness">*</p>
+            <br>
+            <div class="form-checkbox">
+                <% if @setting.must_flg == "1" || @setting.must_flg == nil %>
+                    <input name="must_flg" type="hidden" value="0" />
+                    <input class="custom-checkbox" type="checkbox" value="1" name="must_flg" checked="checked"/>
+                <%else%>
+                    <input name="must_flg" type="hidden" value="0" />
+                    <input class="custom-checkbox" type="checkbox" value="1" name="must_flg" />
+                <%end%>
+            </div>
+            <br>
+
+            
+            <!--自動設定日付区分(コンボボックス)-->
+            <p class="item-name">自動設定日付</p><p class="ness">*</p>
+            <br>
+            <select name="date_div">
+                <% if @setting.date_div == "00" || @setting.date_div == nil %>
+                    <option value="00" selected>初期値無し</option>
+                <%else%>
+                    <option value="00">初期値無し</option>
+                <%end%>
+                <% if @setting.date_div == "0" %>
+                    <option value="0" selected>当日</option>
+                <%else%>
+                    <option value="0" >当日</option>
+                <%end%>
+
+                <% if @setting.date_div == "1" %>
+                    <option value="1" selected >翌営業日</option>
+                <%else%>
+                    <option value="1">翌営業日</option>
+                <%end%>
+
+                <% if @setting.date_div == "2" %>
+                    <option value="2" selected>翌々営業日</option>
+                <%else%>
+                    <option value="2">翌々営業日</option>
+                <%end%>
+
+                <% if @setting.date_div == "3" %>
+                    <option value="3" selected>前営業日</option>
+                <%else%>
+                    <option value="3">前営業日</option>
+                <%end%>
+
+                <% if @setting.date_div == "4" %>
+                    <option value="4" selected>当月20日</option>
+                <%else%>
+                    <option value="4">当月20日</option>
+                <%end%>
+
+                <% if @setting.date_div == "5" %>
+                    <option value="5" selected>月初</option>
+                <%else%>
+                    <option value="5">月初</option>
+                <%end%>
+
+                <% if @setting.date_div == "6" %>
+                    <option value="6" selected>翌営業日(土曜含む)</option>
+                <%else%>
+                    <option value="6">翌営業日(土曜含む)</option>
+                <%end%>
+            </select>
+            <br>
+            <br>
+            
+            <!--コマンド(テキスト)-->
+            <br>
+            <p class="item-name">コマンド</p>
+            <br>
+            <input type="text" name="command" value="<%= @setting.command %>">
+            <br>
+            <br>
+
+            <!--注意事項(テキスト)-->
+            <p class="item-name">注意事項</p>
+            <br>
+            <input type="text" name="caution" value="<%= @setting.caution %>">
+            <br>
+            <br>
+            
+            <!--選択肢枠(テキスト)-->
+            <% if @setting.set_type == "7" %>
+                <p class="item-name">選択肢</p>
+                <% @choices.each do |choice| %>
+                        <div class = "settings-list">
+                            <input type="text" name="choice_name" value="<%= choice.choice_name %>" readonly = "readonly">
+                        </div>
+                <%end%>
+                <%= link_to("選択肢編集", controller: :choices, action: :setedit,set_code: @setting.set_code) %> 
+                <br>
+                <br>
+                <input type="text" name="caution" value="<%= @setting.caution %>">
+                <br>
+                <br>
+            <%end%>
+<%
+=begin%>
+ 
+            <!--表示キー項目コード(テキスト)-->
+            <p class="item-name">表示キー項目コード</p>
+            <br>
+            <input type="text" name="branch_code" value="<%= @setting.branch_code %>">
+            <br>
+            <br>
+
+            <!--表示キー項目内容(テキスト)-->
+            <p class="item-name">表示キー項目内容</p>
+            <br>
+            <input type="text" name="branch_cont" value="<%= @setting.branch_cont %>">
+            <br>
+            <br> 
+<%
+=end%>
+
+            <!--表示設定キー項目コード(テキスト)-->
+            <p class="item-name">表示設定キー項目コード</p>
+            <br>
+            <input type="text" name="sbranch_code" value="<%= @setting.sbranch_code %>">
+            <%@branch_set = Setting.find_by(set_code: @setting.sbranch_code)%>
+            <%if @branch_set%>
+                結果：<%=@branch_set.set_name%>
+            <%end%>
+            <br>
+            <br>
+
+            <!--表示設定キー項目内容(テキスト)-->
+            <p class="item-name">表示設定キー項目内容</p>
+            <br>
+            <input type="text" name="sbranch_cont" value="<%= @setting.sbranch_cont %>">
+            <br>
+            <br>
+            <%if @branch_set%>
+                <%@choices = Choice.where(set_code: @branch_set.set_code)%>
+                <%if @choices[0]%>
+                候補：
+                    <%@choices.each do |choice|%>
+                    <%=choice.choice_name%>
+                    <%end%>
+                <%end%>
+            <%end%>
+            <input type="submit" value="更新">
+            </div>
+        </div>
+        <% end %>
+        <%= link_to("削除", {controller: :settings, action: :destroy,id: @setting.id }, {method: "post"})%>
+    </div>
+</div>
+

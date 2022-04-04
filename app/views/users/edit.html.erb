@@ -1,0 +1,41 @@
+<div class="main users-edit">
+  <div class="container-set">
+    <div class="form-heading">社員編集</div>
+    <div class="form users-form">
+      <div class="form-body">
+        <% @user.errors.full_messages.each do |message| %>
+          <div class="form-error">
+            <%= message %>
+          </div>
+        <% end %>
+      
+        <%= form_tag({controller: :users, action: :update, emp_code: @user.emp_code}, {id:"sub",multipart: true}) do %>
+          <p>社員名</p><br>
+          <input name="emp_name" value="<%= @user.emp_name %>">
+          <br>
+          <%if @current_user.admin_flg == "1"%>
+            <p>管理者フラグ</p><br>
+            <%if @user.admin_flg == "1"%>
+              <input type="checkbox" name="admin_flg" value="1" checked="checked">
+            <%else%>
+              <input type="checkbox" name="admin_flg" value="1">
+            <%end%>
+          <%end%><br><br>
+          <p>＜変更時のみ入力＞</p><br>
+          <p>新パスワード</p><br>
+          <input type="password" name="password" value="">
+          <br>
+          <p>新パスワード(確認用)</p><br>
+          <input type="password" name="password_c" value="">
+          <input type="submit" value="保存">
+          
+        <% end %>
+      </div>
+      
+    </div>
+    <br>
+    <%if @current_user.admin_flg == "1"%>
+      <%= link_to("削除", {controller: :users, action: :destroy, id: @user.id}, {method: "post"})%> 
+    <%end%>
+  </div>
+</div>

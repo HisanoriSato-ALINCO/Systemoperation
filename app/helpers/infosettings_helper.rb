@@ -1,0 +1,2 @@
+module InfosettingsHelper
+end

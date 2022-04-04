@@ -1,0 +1,56 @@
+<h1>Edit Opssytem</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        <%= link_to("戻る", {controller: :osystems, action: :index})%>
+        <h1 class="form-heading">操作システム編集</h1>
+        <%= form_tag({controller: :osystems, action: :update, id: @osystem.id}, {id: "sub",multipart: true}) do %>
+        <div class="form">
+            <div class="form-body">
+            <% @osystem.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <%
+=begin%>
+ <!--オペレーションコード(テキスト)-->
+            <p class="item-name">操作システムコード</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="osys_code" value="<%= @osystem.osys_code %>">
+            <br>
+            <br> 
+<%
+=end%>
+            <!--有効/無効ステータスで変更の可否分岐-->
+            <%if @osystem.valid_flg == "1"%>
+            <!--オペレーション名(テキスト)-->
+                <p class="item-name">操作システム名</p><p class="ness">*</p>
+                <br>
+                <input type="text" name="osys_name" value="<%= @osystem.osys_name %>">
+                <br>
+                <br>
+                <input type="submit" value="作成">
+            <%else%>
+                <p class="item-name">操作システム名</p><p class="ness">*</p>
+                <br>
+                <input type="text" name="osys_name" value="<%= @osystem.osys_name %>" readonly>
+                <br>
+                <br>
+            <%end%>
+            </div>
+        </div>
+        <% end %>
+        <!--有効/無効ステータスで有効/無効化-->
+        <div class= "link-btn">
+        <%if @osystem.valid_flg == "1"%>
+            <%= link_to("無効化", {controller: :osystems, action: :invalidate,id: @osystem.id }, {method: "post"})%>
+        <%else%>
+            <%= link_to("有効化", {controller: :osystems, action: :validate,id: @osystem.id }, {method: "post"})%>
+        <%end%>
+        </div>
+    </div>
+</div>

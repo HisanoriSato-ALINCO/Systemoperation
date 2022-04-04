@@ -1,0 +1,21 @@
+<div class="main posts-new">
+  <div class="container">
+    <h1 class="form-heading">期間新規作成</h1>
+    <%= form_tag(controller: :sheets, action: :bulk_create) do %>
+      <div class="form">
+        <div class="form-body">
+          <a>開始日選択</a>
+          <br>
+          <input type="date" name="stt_date" value="<%=@stt_date%>">
+          <br>
+          <a>終了日選択</a>
+          <br>
+          <input type="date" name="end_date" value="<%=@end_date%>">
+          <br><br>
+
+          <input type="submit" value="作成">
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

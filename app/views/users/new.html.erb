@@ -1,0 +1,39 @@
+<div class="main users-new">
+  <div class="container-set">
+    <h1 class="form-heading">新規ユーザー登録</h1>
+    <div class="form users-form">
+      <div class="form-body">
+
+        <% @user.errors.full_messages.each do |message| %>
+          <div class="form-error">
+            <%= message %>
+          </div>
+        <% end %> 
+
+        
+        <%= form_tag({controller: :users, action: :create},{id:"sub"}) do %>
+          <p>社員名</p>
+          <br>
+          <input name="emp_name" value="<%= @user.emp_name %>">
+          <br>
+
+          <p>社員番号</p>
+          <br>
+          <input name="emp_code" value="<%= @user.emp_code %>">
+          <br>
+
+          <p>パスワード</p>
+          <br>
+          <input type="password" name="password" value="<%= @user.password %>">
+          <br>
+
+          <p>パスワード(確認用)</p>
+          <br>
+          <input type="password" name="password_c" value="">
+          <br>
+          <input type="submit" value="新規登録">
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="main posts-index">
+  <div class="container">
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+  <h1 class="form-heading">区分設定一覧</h1>
+  
+  <% @sheets.each do |sheet| %> 
+      <div class="posts-index-item">
+        <div class="form-set">
+          <div class="post-date-set">
+            <%= link_to(sheet.duty_date, "/sheets/#{sheet.id}/edit",class: "post-link") %>
+            <!--同日付でシート重複時は作成日を赤字で表示-->
+            <%duplicate_sheets = Sheet.where(duty_date: sheet.duty_date).order(created_at: :asc)%>
+            <%if duplicate_sheets[1]%>
+              <div class="caution">
+              作成：<%= sheet.created_at.strftime('%Y-%m-%d %H:%M')%>
+              </div>
+            <%end%> 
+          </div>
+          <div class="form-body-set">
+            <ul>
+              <li>
+              <!--リスト内容-->
+              <%= form_tag({controller: :sheets, action: :bulk_set, id: sheet.id} ,{id: "sub"}) do %> 
+              <a>区分選択</a>
+              <br>
+              <div class="form-checkbox-side">
+                <div class= "check-list">
+                <%= check_box :sheet, :inv_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :inv_flg, "請求" %>
+                </div>
+                <div class= "check-list"> 
+                <%= check_box :sheet, :cf_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :cf_flg, "締日" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :ac_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :ac_flg, "会計締" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :bigm_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :bigm_flg, "月初翌営業日" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :fare_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :fare_flg, "運賃締" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :mnth_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :mnth_flg, "月次" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :mnxt_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :mnxt_flg, "月次翌営業日" %>
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :tmp_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :tmp_flg, "臨時稼働" %>
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :gex_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :gex_flg, "販売延長" %> 
+                </div>
+                <%
+=begin%>
+ <div class= "check-list">
+                <%= check_box :sheet, :ex_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :ex_flg, "拡張項目有" %> 
+                </div> 
+<%
+=end%>
+            </div>
+              <input type="submit" value="完了">
+              <%end%>
+              <%= link_to "削除", {controller: :sheets, action: :destroy,id: sheet.id ,page: "bulk_setindex"}, method: "delete", data: { confirm: "削除しますか？" }%>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="post-right">
+            
+        </div>
+      </div>
+  <% end %> 
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<h1>New Operation</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">新規作成</h1>
+        <%= form_tag({controller: :settings, action: :infocreate, op_code: @operation.op_code ,id: @setting.id}, {id: "sub",multipart: true}) do %>
+        <div class="form">
+            <div class="form-body">
+            <% @setting.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <!--関連オペレーションを表示-->
+            <%if @operation%>
+            <h1><%=@operation.op_name%></h1>
+            <%end%>
+            <br>
+            <%
+=begin%>
+ <!--設定コード(テキスト)-->
+            <p class="item-name">設定コード</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="set_code" value="<%= @setting.set_code %>">
+            <br>
+            <br> 
+<%
+=end%>
+            <!--設定名(テキスト)-->
+            <p class="item-name">設定名</p><p class="ness">*</p>
+            <br>
+            <input type="text" name="set_name" value="<%= @setting.set_name %>">
+            <br>
+            <br>
+
+            <!--初期値(テキスト)-->
+            <p class="item-name">初期値</p><p class="ness">*</p>
+            <br>
+            <textarea name="default_value"><%if @setting.default_value %><%=@setting.default_value %><%end%></textarea>
+            <br>
+
+            <input type="submit" value="作成">
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

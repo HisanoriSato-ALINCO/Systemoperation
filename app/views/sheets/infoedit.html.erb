@@ -1,0 +1,179 @@
+
+<h1>Edit Opssytem</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">当番作業</h1>
+        <%= link_to("戻る", {controller: :sheets, action: :edit,id: @sheet.id}) %>
+        <div class="form">
+            <div class="form-body">
+            <div class="duty_date">
+            <!--日付表示-->
+            <%=@sheet.duty_date%> <%=@sheet.id%>
+            <!--完了シートはアイコン表示-->
+            <%if @sheet.opdone != nil %>
+                <span class="fa fa-check-circle done-icon"></span>
+            <%end%> 
+            </div> 
+            <table>
+            <% @actions.each do |action| %>
+                <div>
+                <!--表示フラグの設定-->
+                <% @disp_flg = "1"%>
+                <!--表示キー項目の取得-->
+                <%@branchkey_action = Action.find_by(op_code: action.branch_code,sheet_id: @sheet.id) %>
+                <!--表示キー項目の取得-->
+                <%@branchkeycont = action.branch_cont %>
+                <!--表示キー項目有りかつ表示キー内容が異なれば、表示フラグをOFFにする-->
+                <% if @branchkey_action %>
+                    <% if @branchkey_action.op_cont != @branchkeycont %>
+                    <% @disp_flg = "0" %>
+                    <%end%>
+                <%end%>
+                <!--表示フラグOFF以外の項目を表示-->
+                <%if @disp_flg != "0"%>
+                    <!--項目ヘッダ行-->
+                    <!--当番ヘッダ-->
+                    <!--前のレコードと操作システムが異なればヘッダ挿入-->
+                    <% if action.duty_div != @action_before.duty_div%>
+                        <th class="div_cell" colspan="3">
+                            <%= action.duty_div.slice(2,20)%>：
+                            <%if action.done_pcode%>
+                                <%=action.done_pname%>
+                            <%end%>
+                            <%if action.duty_done != nil %>
+                                <span class="fa fa-check-circle done-icon"></span>
+                            <%end%>
+                        </th>
+                            
+                        <tr>
+                            <th>処理名</th>
+                            <th>結果</th>
+                            <th>入力</th>
+                        </tr>
+                    <%end%>
+                    
+                    <!--操作システムヘッダ行開始-->
+                    <!--前のレコードと操作システムが異なればヘッダ挿入-->
+                    <% if action.osys_code != @action_before.osys_code%>
+                        <tr>
+                            <td class="head_cell" colspan="3">
+                                <%=action.osys_name%>
+                            </td>
+                        </tr>
+                    <% end %>
+
+                        <!--行開始_明細項目-->
+                        <tr>
+                        <!--作業名-->
+                        <td class="name_cell">
+                            <%= 
+                            action.op_name
+                            %>
+                            <%=action.id%>
+                            <!--コマンドを青字で表示-->  
+                            <%if action.command %>
+                                <div class="command">
+                                <%=action.command%>
+                                </div>
+                            <%end%>
+                            <!--注意事項を赤字で表示-->  
+                            <%if action.caution %>
+                                <div class="caution">
+                                <%=action.caution%>
+                                </div>
+                            <%end%>
+
+                            <!--ここに設定項目の値を表示-->  
+                            <% @preparations = Preparation.where(sheet_id: @sheet.id,op_code: action.op_code).order(set_num: :asc) %>
+                            <% @preparations.each do |preparation|%>
+                                <div class= "supplement">
+                                    <%= preparation.set_name %>:
+                                </div>
+                            <%if preparation.set_cont%>
+                            <% str=preparation.set_cont.to_s%>
+                            <!--改行表示用スクリプト-->  
+                            <%= h(str).gsub(/\r|\r\n|\n/, "<br>").html_safe %>
+                            <% end %>
+                            <%end%>
+                        </td>
+                        <!--時刻表示-->
+                        <td class="time_cell">
+                            <!--実行時刻表示-->
+                            <%if action.done_time%>
+                                <%= action.done_time.to_s(:time) %>
+                            <%end%>
+                            <!--入力値表示-->
+                            <%if action.op_cont != nil%>
+                            <div class="supplement">
+                            <%=action.op_cont%>
+                            </div>
+                            <%end%>
+                        </td>
+                        <!--入力欄-->
+                        <td class="cont_cell">
+                        <!--選択肢取得-->
+                        <% choices = Choice.where(op_code: action.op_code) %>
+                        <% choice = choices[0] %>
+                        <!--打刻が無ければ入力欄の表示-->
+                        <% if action.done_time == nil %>
+                            <%= form_tag({controller: :sheets, action: :do ,id: @sheet.id ,act_id: action.id},{id: "sub",remote: true}) do %>
+                            <!--選択肢があればプルダウンリスト表示-->
+                            <%if choice != nil %>
+                                <%= collection_select(:choice,:choice_id, choices, :id, :choice_name) %>
+                            <!--無ければ入力属性に応じた入力欄表示-->
+                            <%else%>
+                                <!--数値-->
+                                <%if action.op_type == "1"%>
+                                    <input name="act_cont" type= "number" class="cnt_area">
+                                <!--数値(小数点)-->
+                                <%elsif action.op_type == "2"%>
+                                    <input name="act_cont" type= "number" step= '0.1' class="cnt_area">
+                                <!--数値(テキスト)-->
+                                <%elsif action.op_type == "3"%>
+                                    <input name="act_cont" class="cnt_area">
+                                <!--日付-->
+                                <%elsif action.op_type == "4"%>
+                                    <input name="act_cont" type= "date" class="cnt_area">
+                                <!--時刻-->
+                                <%elsif action.op_type == "5"%>
+                                    <input name="act_cont" type= "time" class="cnt_area">
+                                <!--テキストエリア-->
+                                <%elsif action.op_type == "6"%>
+                                    <textarea name="act_cont"></textarea>
+                                <!--選択肢マスタ無しの選択肢-->
+                                <%elsif action.op_type == "7"%>
+                                    <input name="act_cont" class="cnt_area">
+                                <%end%>
+                            <%end%>
+                            <!--更新ボタン-->
+                            <input type="submit" value="更新">
+                            <% end %>
+                        <!--打刻があれば取消ボタンの表示-->
+                        <%else%>
+                            <%= form_tag({controller: :sheets, action: :undo ,id: @sheet.id ,act_id: action.id},{id: "sub",remote: true}) do %>
+                            <input type="submit" value="取消">
+                            <%end%>
+                        <%end%>
+                        </td> 
+                        </tr>
+                        <!--行終了-->
+                    </div>
+                    <!--アクションを保存-->
+                    <% @action_before = Action.find_by(id: action.id) %>
+                <%end%>
+            <% end %>
+            </table>
+            <div class="post-time">
+            </div>
+            </div>
+        </div>
+        <% if @current_user.admin_flg == "1" && @sheet.predone != nil%>
+            <%= link_to("削除", {controller: :sheets, action: :destroy,id: @sheet.id }, {method: "post"})%>
+        <%end%>
+    </div>
+</div>
+

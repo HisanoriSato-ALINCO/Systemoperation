@@ -1,0 +1,95 @@
+<h1>Editing Choice</h1>
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">販売延長者入力</h1>
+        <%@sheet.duty_date%>
+        <div class="form-top">
+            <div class="form-body">
+                <div class="form-error">
+                </div>
+                <!--親シートの表示-->
+                <%if @sheet%>
+                    <%= link_to(@sheet.duty_date, {controller: :sheets, action: :setedit, id: @sheet.id})%>
+                <%end%>
+            </div>
+        </div>
+        <div class="form">
+            <div class="form-body">
+            <% @experson.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+
+            <!--選択肢(テキスト)-->
+            
+            <p class="item-name">延長対象者</p>
+            <br>
+            
+            <%= form_tag({controller: :expeople, action: :create, id: @sheet.id}, {id: "sub",multipart: true}) do %>
+            <table>
+                <tr>
+                    <th>所属</th>
+                    <th>社員コード</th>
+                    <th>社員名</th>
+                    <th>操作</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="ac_dept" class="cnt_area_gex" value="<%= @experson.ac_dept %>">
+                    </td>
+                    <td>
+                        <input type="text" name="ac_code" class="cnt_area_gex" value="<%= @experson.ac_code %>">
+                    </td>
+                    <td>
+                        <input type="text" name="ac_name" class="cnt_area_gex" value="<%= @experson.ac_name %>">
+                    </td>
+                    <td>
+                        <% if @sheet.opdone == nil%>
+                        <input type="submit" class="cnt_area_gex" value="新規作成">
+                        <%end%>
+                    </td> 
+                </tr>
+            </table>
+            <%end%>
+            <br>
+            <br>
+            <% if @expeople[0]%>
+                <table>
+                    <tr>
+                        <th>所属</th>
+                        <th>社員コード</th>
+                        <th>社員名</th>
+                        <th>操作</th>
+                    </tr>
+                    <% @expeople.each do |experson| %>
+                        <%= form_tag({controller: :expeople, action: :update, id: @sheet.id,exp_id: experson.id }, {id: "sub",multipart: true}) do %>
+                        <tr>
+                            <td>
+                                <input type="text" name="ac_dept" class="cnt_area_gex" value="<%= experson.ac_dept %>">
+                                <br>
+                                <% if @sheet.opdone == nil%>
+                                <%= link_to("削除", {controller: :expeople, action: :destroy, id: @sheet.id,exp_id: experson.id }, {method: "post"})%>
+                                <%end%>
+                            </td>
+                            <td>
+                                <input type="text" name="ac_code" class="cnt_area_gex" value="<%= experson.ac_code %>">
+                            </td>
+                            <td>
+                                <input type="text" name="ac_name" class="cnt_area_gex" value="<%= experson.ac_name %>">
+                            </td>
+                            <td>
+                            <% if @sheet.opdone == nil%>
+                                <input type="submit" class="cnt_area_gex" value="更新">
+                            <%end%>
+                            </td> 
+                        </tr>
+                        <%end%>
+                    <%end%>
+                    </table>
+            <%end%>
+            </div>
+        </div>
+    </div>
+</div>

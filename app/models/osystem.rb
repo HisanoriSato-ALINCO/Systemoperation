@@ -1,0 +1,2 @@
+class Osystem < ApplicationRecord
+end

@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1></h1>
+<br>
+
+<%= link_to 'New opsystem', osystems_new_path %>
+
+<div class="main users-index">
+  <div class="container-set">
+    <h1 class="form-heading">操作システム一覧</h1>
+    <%if @valid_flg != "0"%>
+    <div class="right">
+      <div class= "link-btn">
+        <%= link_to '新規作成', osystems_new_path %>
+      </div>
+    </div>
+    <%end%>
+    <div class="search-btn">
+    <%= link_to"有効", osystems_index_path(valid_flg: "1") %>
+    <%= link_to"無効", osystems_index_path(valid_flg: "0") %>
+    </div>
+    <% @osystems.each do |osystem| %>
+          <div class="users-index-item">
+              <%= link_to(osystem.osys_name, controller: :osystems, action: :edit, id: osystem.id) %>
+          </div>
+        <% end %> 
+  </div>
+</div>

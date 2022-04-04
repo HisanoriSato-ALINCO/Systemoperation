@@ -1,0 +1,83 @@
+/* line 5, app/assets/stylesheets/operations.scss */
+p {
+  display: inline-block;
+}
+
+/* line 9, app/assets/stylesheets/operations.scss */
+.item-name {
+  color: #717880;
+  font-size: 15px;
+}
+
+/* line 14, app/assets/stylesheets/operations.scss */
+.ness {
+  color: #fa5656;
+  font-size: 15px;
+}
+
+/* line 20, app/assets/stylesheets/operations.scss */
+.div-select {
+  display: inline-block;
+  width: 130px;
+}
+
+/* line 26, app/assets/stylesheets/operations.scss */
+.container {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  clear: both;
+}
+
+/* line 34, app/assets/stylesheets/operations.scss */
+.container-right {
+  max-width: 250px;
+  padding-left: 10px;
+  padding-right: 10px;
+  clear: both;
+}
+
+/* line 41, app/assets/stylesheets/operations.scss */
+.form {
+  max-width: 1000px;
+  background-color: white;
+  box-shadow: 0 2px 6px #c1ced7;
+}
+
+/* line 48, app/assets/stylesheets/operations.scss */
+.form-top {
+  max-width: 1000px;
+  background-color: #f3f3f3;
+  box-shadow: 0 4px 6px #c1ced7;
+}
+
+/* line 55, app/assets/stylesheets/operations.scss */
+.form-set {
+  max-width: 900px;
+  background-color: white;
+}
+
+/* line 61, app/assets/stylesheets/operations.scss */
+.form-heading {
+  font-weight: 300;
+  margin: 60px 0 20px;
+  font-size: 48px;
+  color: #bcc8d4;
+}
+
+/* line 68, app/assets/stylesheets/operations.scss */
+.form-body {
+  padding: 30px;
+}
+
+/* line 72, app/assets/stylesheets/operations.scss */
+.form-body-set {
+  padding: 5px;
+}
+
+/* line 76, app/assets/stylesheets/operations.scss */
+.form-body a {
+  font-weight: 600;
+  font-size: 20px;
+}

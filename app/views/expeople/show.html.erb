@@ -1,0 +1,65 @@
+<h1>Editing Choice</h1>
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">販売延長者入力</h1>
+        <%@sheet.duty_date%>
+        <div class="form-top">
+            <div class="form-body">
+                <div class="form-error">
+                </div>
+                <!--親シートの表示-->
+                <%if @sheet%>
+                    <%= link_to(@sheet.duty_date, {controller: :sheets, action: :setedit, id: @sheet.id})%>
+                <%end%>
+            </div>
+        </div>
+        <div class="form">
+            <div class="form-body">
+            <% @experson.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <%@experson = @expeople[0]%>
+            <%if @experson.done_time %>
+                <%= form_tag({controller: :expeople, action: :undo, id: @sheet.id }, {multipart: true}) do %>
+                <input type="submit" class="cnt_area_gex" value="取消">
+                <%end%>
+            <%else%>
+                <%= form_tag({controller: :expeople, action: :do, id: @sheet.id }, {multipart: true}) do %>
+                <input type="submit" class="cnt_area_gex" value="完了">
+                <%end%>
+            <%end%>
+            <!--延長対象者リスト-->
+            <%if @experson.done_time%>
+                <%=@experson.done_time.to_s(:time)%>
+            <%end%>
+            <br>
+            <% if @expeople[0]%>
+                <table>
+                    <tr>
+                        <th>所属</th>
+                        <th>社員コード</th>
+                        <th>社員名</th>
+                    </tr>
+                    <% @expeople.each do |experson| %>
+                        <tr>
+                            <td>
+                                <%= experson.ac_dept %>
+                            </td>
+                            <td>
+                                <%= experson.ac_code %>
+                            </td>
+                            <td>
+                                <%= experson.ac_name %>
+                                
+                            </td>
+                        </tr>
+                    <%end%>
+                    </table>
+            <%end%>
+            </div>
+        </div>
+    </div>
+</div>

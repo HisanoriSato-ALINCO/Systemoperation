@@ -1,0 +1,82 @@
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">新規作成</h1>
+        
+        <%= form_tag({controller: :sheets, action: :create},{id:"sub"}) do %>
+        
+        <div class="form">
+            <div class="form-body">
+            <% @sheet.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <a>作業日選択</a>
+            <br>
+            <input type="date" name="duty_date" value="<%= @sheet.duty_date %>">
+            <br><br>
+            
+            <a>区分選択</a>
+            <br>
+            <div class="form-checkbox-side">
+                <div class= "check-list">
+                    <%= check_box :sheet, :inv_flg, {class: "check_box"}, checked_value = "1",nil %>
+                    <br>
+                    <%= label :inv_flg, "請求" %> 
+                </div>
+                <div class= "check-list">
+                    <%= check_box :sheet, :cf_flg, {class: "check_box"}, checked_value = "1",nil %>
+                    <br>
+                    <%= label :cf_flg, "締日" %> 
+                </div>
+                <div class= "check-list">
+                    <%= check_box :sheet, :ac_flg, {class: "check_box"}, checked_value = "1",nil %>
+                    <br>
+                    <%= label :ac_flg, "会計締" %> 
+                </div>
+                <div class= "check-list">
+                    <%= check_box :sheet, :bigm_flg, {class: "check_box"}, checked_value = "1",nil %>
+                    <br>
+                    <%= label :bigm_flg, "月初翌営業日" %> 
+                </div>
+                <br>
+                <div class= "check-list">
+                    <%= check_box :sheet, :fare_flg, {class: "check_box"}, checked_value = "1",nil %>
+                    <br>
+                    <%= label :fare_flg, "運賃締" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :mnth_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :mnth_flg, "月次" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :mnxt_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :mnxt_flg, "月次翌営業日" %>
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :tmp_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :tmp_flg, "臨時稼働" %>
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :gex_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :gex_flg, "販売延長" %> 
+                </div>
+                <div class= "check-list">
+                <%= check_box :sheet, :ex_flg, {class: "check_box"}, checked_value = "1",nil %>
+                <br>
+                <%= label :ex_flg, "拡張項目有" %> 
+                </div>
+            </div>
+            </div>
+
+            <input type="submit" value="作成">
+
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+<h1>Edit Opssytem</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+        <h1 class="form-heading">情報課設定</h1>
+        <%= link_to("戻る", {controller: :sheets, action: :setedit,id: @sheet.id}) %>
+        <div class="form">
+            <div class="form-body">
+            <div class="duty_date_set">
+            <!--日付表示-->
+            <%=@sheet.duty_date%>
+            <!--完了シートはアイコン表示-->
+            <%if @sheet.predone != nil %>
+                <span class="fa fa-check-circle done-icon"></span>
+            <%end%> 
+            </div> 
+            </div>
+            
+            
+            <!--区分表示-->
+            <div class="division">
+                <ul>
+                <%if @sheet.inv_flg!="1" && @sheet.cf_flg!="1" && @sheet.ac_flg!="1" && @sheet.fare_flg!="1" && @sheet.bigm_flg!="1" && @sheet.mnth_flg!="1" && @sheet.mnxt_flg!="1"%>
+                <li>通常</li>
+                <%end%>
+                <%if @sheet.inv_flg=="1"%>
+                <li>請求</li>
+                <%end%>
+                <%if @sheet.cf_flg=="1"%>
+                <li>締日</li>
+                <%end%>
+                <%if @sheet.ac_flg=="1"%>
+                <li>会計締</li>
+                <%end%>
+                <%if @sheet.bigm_flg=="1"%>
+                <li>月初翌営業日</li>
+                <%end%>
+                <%if @sheet.fare_flg=="1"%>
+                <li>運賃締</li>
+                <%end%>
+                <%if @sheet.mnth_flg=="1"%>
+                <li>月次</li>
+                <%end%>
+                <%if @sheet.mnxt_flg=="1"%>
+                <li>月次翌営業日</li>
+                <%end%>
+                </ul>
+            </div>
+            
+            <table>
+            <% @actions.each do |action| %>
+                <div>
+                <!--アクションに紐つく関連設定を取得-->
+                <%@preparations = Preparation.where(sheet_id: @sheet.id,op_code: action.op_code).order(msys_name: :asc,set_num: :asc)%>
+                <% @preparations.each do |preparation|%>
+                <!--表示フラグの設定-->
+                <% @disp_flg = "1"%>
+                <!--表示キー項目の取得-->
+                <%@branchkey_prep = Preparation.find_by(set_code: preparation.branch_code,sheet_id: @sheet.id) %>
+                <%@branchkeycont = preparation.branch_cont %>
+                <!--表示キー項目有りかつ表示キー内容が異なれば、表示フラグをOFFにする-->
+                <% if @branchkey_prep%>
+                    <% if @branchkey_prep.set_cont != @branchkeycont %>
+                    <%@disp_flg = "0"%>
+                    <%end%>
+                <%end%>
+                <!--表示フラグOFF以外の項目を表示-->
+                <%if @disp_flg != "0"%>
+                    <!--項目ヘッダ行-->
+                    <!--当番ヘッダ-->
+                    <!--前のレコードと操作システムが異なればヘッダ挿入-->
+                    <% if preparation.msys_name != @preparation_before.msys_name%>
+                        <th class="div_cell" colspan="3">
+                            <%@msystem = Msystem.find_by(msys_code: preparation.msys_code)%>
+                            <%= @msystem.msys_name %>：
+                            <%if preparation.set_pcode%>
+                                <%=preparation.set_pname%>
+                            <%end%>
+                            <%if preparation.sys_done != nil %>
+                                <span class="fa fa-check-circle done-icon"></span>
+                            <%end%>
+                        </th>
+                            
+                        <tr>
+                            <th>処理名</th>
+                            <th>結果</th>
+                            <th>入力</th>
+                        </tr>
+                    <%end%>
+                    
+                    <!--操作システムヘッダ行開始-->
+                    <!--前のレコードと操作システムが異なればヘッダ挿入-->
+                    <% if preparation.msys_code != @preparation_before.msys_code%>
+                        <tr>
+                            <td class="head_cell" colspan="3">
+                                <%=preparation.msys_name%>
+                            </td>
+                        </tr>
+                    <% end %>
+
+                        <!--行開始_明細項目-->
+                        <tr>
+                        <!--作業名-->
+                        <td class="name_cell">
+                            <%= 
+                            preparation.set_name
+                            %>
+                            <!--コマンドを青字で表示-->  
+                            <%if preparation.command %>
+                                <div class="command">
+                                <%=preparation.command%>
+                                </div>
+                            <%end%>
+                            <!--注意事項を赤字で表示-->  
+                            <%if preparation.caution %>
+                                <div class="caution">
+                                <%=preparation.caution%>
+                                </div>
+                            <%end%>
+
+                            <!--ここに設定項目の値を表示-->  
+                            <% @preparations = Preparation.where(sheet_id: @sheet.id,set_code: preparation.set_code).order(set_num: :asc) %>
+                            <% @preparations.each do |preparation|%>
+                                <div class= "supplement">
+                                <%if action.op_name%>
+                                    <%= action.op_name%>
+                                <% end %>
+                                </div>
+                                <%if preparation.set_cont%>
+                                    <% str=preparation.set_cont.to_s%>
+                                    <!--改行表示用スクリプト-->  
+                                    <%= h(str).gsub(/\r|\r\n|\n/, "<br>").html_safe %>
+                                <% end %>
+                            <%end%>
+                        </td>
+                        <!--時刻表示-->
+                        <td class="time_cell">
+                            <!--実行時刻表示-->
+                            <%if preparation.set_time%>
+                                <%= preparation.set_time.to_s(:time) %>
+                            <%end%>
+                        </td>
+                        <!--入力欄-->
+                        <td class="done_cell">
+                        <!--選択肢取得-->
+                        <% choices = Choice.where(set_code: preparation.set_code) %>
+                        <% choice = choices[0] %>
+                        
+                            <%= form_tag({controller: :sheets, action: :set ,id: @sheet.id ,prp_id: preparation.id},{id: "sub",remote: true}) do %>
+                            <!--選択肢があればプルダウンリスト表示-->
+                            <%if choice != nil %>
+                                <%= collection_select(:choice,:choice_id, choices, :id, :choice_name) %>
+                            <!--無ければ入力属性に応じた入力欄表示-->
+                            <%else%>
+                                <!--数値-->
+                                <%if preparation.set_type == "1"%>
+                                    <input name="set_cont" type= "number" value = "<%=preparation.set_cont%>" class="cnt_area">
+                                <!--数値(小数点)-->
+                                <%elsif preparation.set_type == "2"%>
+                                    <input name="set_cont" type= "number" value = "<%=preparation.set_cont%>" step= '0.1' class="cnt_area">
+                                <!--数値(テキスト)-->
+                                <%elsif preparation.set_type == "3"%>
+                                    <input name="set_cont" value = "<%=preparation.set_cont%>" class="cnt_area">
+                                <!--日付-->
+                                <%elsif preparation.set_type == "4"%>
+                                    <input name="set_cont" type= "date" value = "<%=preparation.set_cont%>"  class="cnt_area">
+                                <!--時刻-->
+                                <%elsif preparation.set_type == "5"%>
+                                    <input name="set_cont" type= "time" value = "<%=preparation.set_cont%>"  class="cnt_area">
+                                <!--テキストエリア-->
+                                <%elsif preparation.set_type == "6"%>
+                                    <textarea name="set_cont"><%=preparation.set_cont%></textarea>
+                                <!--選択肢マスタ無しの選択肢-->
+                                <%elsif preparation.set_type == "7"%>
+                                    <input name="set_cont"  value = "<%=preparation.set_cont%>" class="cnt_area">
+                                <%end%>
+                            <%end%>
+                            <!--確定ボタンを表示(色)-->
+                                <input type="submit" value="確定">
+                            <% end %>
+                        
+                        </td> 
+                        </tr>
+                        <!--行終了-->
+                    </div>
+                    <!--アクションを保存-->
+                    <%end%>
+                    <% @preparation_before = Preparation.find_by(id: preparation.id) %>
+                <%end%>
+            <% end %>
+            </table>
+            <div class="post-time">
+            </div>
+            </div>
+        </div>
+        <%= link_to("削除", {controller: :sheets, action: :destroy,id: @sheet.id }, {method: "post"})%>
+    </div>
+</div>
+

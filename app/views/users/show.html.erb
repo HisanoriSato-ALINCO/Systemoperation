@@ -1,0 +1,11 @@
+<div class="main user-show">
+  <div class="container">
+    <div class="user">
+      <h2><%= @user.emp_name %></h2>
+      <p><%= @user.emp_code %></p>
+      <br>
+        <%= link_to("編集", controller: :users, action: :edit, emp_code: @user.emp_code) %>
+    </div>
+    
+  </div>
+</div>

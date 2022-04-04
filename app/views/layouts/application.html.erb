@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>オペレーション管理システム</title>
+    <%= csrf_meta_tags %>
+    <!-- コード追加　Bootstrap CSS読み込みコード-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <!--ソート用jsの読込-->
+    <%= javascript_include_tag 'Sortable.min.js' %>
+    
+    <!-- コード追加　Bootstrap JavaScript読み込みコード-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!--Faの読取コード-->
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <!--ファビコン用-->
+    <%= favicon_link_tag('favicon.ico') %> 
+
+  </head>
+
+  <body>
+    <header>
+      <div class="header-logo">
+        Operation
+      </div>
+        <ul class="header-menus" id="hdr">
+      <!--サンプル表示-->
+        <% if @current_user %>
+          <li>
+            <%= @current_user.emp_name%>
+          </li>
+          
+          <li><a href="#">文書一覧</q>
+            <ul>
+              <li>
+                <%= link_to("文書一覧", sheets_index_path) %>
+              </li>
+              <li>
+                <%= link_to("完了済一覧", sheets_doneindex_path) %>
+              </li>
+            </ul>
+          </li> 
+          <li><a href="#">文書設定</q>
+            <ul>
+              <li>
+                <%= link_to("設定一覧", sheets_setindex_path) %>
+              </li>
+              <li>
+                <%= link_to("新規作成", sheets_new_path) %>
+              </li> 
+              <li>
+                <%= link_to("一括作成", sheets_bulk_new_path) %>
+              </li> 
+              <li>
+                <%= link_to("一括区分設定", sheets_bulk_setindex_path) %>
+              </li> 
+            </ul>
+          </li>
+          <li><a href="#">マスタ管理</q>
+            <ul>
+              <li>
+                <%= link_to("オペ一覧", operations_index_path,{id: "link"}) %>
+              </li>
+              <li>
+                <%= link_to("操作SYS一覧", osystems_index_path) %>
+              </li>
+              <li>
+                <%= link_to("管理SYS一覧", msystems_index_path) %>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#">社員設定</q>
+            <ul>
+              <li>
+                <%= link_to("社員一覧", users_index_path) %>
+              </li> 
+              <li>
+                <%= link_to("社員登録", signup_path) %>
+              </li>
+              </ul>
+          </li>
+              <li>
+                <%= link_to("ログアウト", logout_path, {method: "post"}) %>
+              </li>
+            
+          
+        <% else %>
+        
+          <li>
+            <%= link_to("社員登録", signup_path) %>
+          </li>
+          <li>
+            <%= link_to("ログイン", login_path) %>
+          </li>
+        <% end %> 
+
+        </ul>
+      
+    </header>
+
+    <% if flash[:notice] %>
+      <div class="flash">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    
+    <%= yield %>
+    
+    <!-- ロード画面（非表示、サブミット時などでjsから表示制御） -->
+    <!--START処理中入力制御-->
+    <!--ローディング画面-->
+    <%= render partial: 'layouts/loading' %>
+    <script type="text/javascript">
+        $(document).on('turbolinks:load', function(){
+            //今回は対象のidがループにより生成されたレコードにて重複する為、ワイルドカード指定
+            $('[id^=sub]').submit(function(e) {
+            //$('#sub').submit(function(e) { //1画面1idの場合
+            $('#loading').show();
+            });
+            
+        });
+        //画面遷移時にヘッダをフェードイン
+        $(window).on('turbolinks:load',function() {
+        $("h1.form-heading").fadeIn('slow');
+        });
+        $(window).on('load',function() {
+        $("h1.form-heading").fadeIn('slow');
+        });
+    </script>
+    <!--END処理中入力制御-->
+  </body>
+</html>

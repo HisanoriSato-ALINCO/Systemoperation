@@ -1,0 +1,2 @@
+class Experson < ApplicationRecord
+end

@@ -1,0 +1,46 @@
+
+
+    <div class="main posts-index">
+    <div class="container-set">
+    <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+    <h1 class="form-heading">設定一覧</h1>
+    
+    <% @sheets.each do |sheet| %>
+        <div class="posts-index-item">
+            <div class="post-left">
+            <div class="post-date-set">
+                <%= link_to(sheet.duty_date, {controller: :sheets, action: :setedit, id: sheet.id }, class: 'post-link') %>
+                <!--同日付でシート重複時は作成日を赤字で表示-->
+                <%duplicate_sheets = Sheet.where(duty_date: sheet.duty_date).order(created_at: :asc)%>
+                <%if duplicate_sheets[1]%>
+                <div class="caution">
+                作成：<%= sheet.created_at.strftime('%Y-%m-%d %H:%M')%>
+                </div>
+                <%end%>
+            </div>
+                <%= link_to("プレビュー", {controller: :sheets, action: :edit, id: sheet.id },class: "post-set") %>
+                <%= link_to "削除", {controller: :sheets, action: :destroy,id: sheet.id ,page: "setindex"}, method: "post", data: { confirm: "削除しますか？" }%>
+            <div class="duty-list-set">
+                <% preparations = Preparation.where(sheet_id: sheet.id).group('msys_code')%>
+                <ul>
+                <%preparations.each do |preparation|%>
+                    <%msystem = Msystem.find_by(msys_code: preparation.msys_code)%>
+                    <%if msystem%>
+                    <li>
+                    <a><%=msystem.msys_name.slice(0..1)%>:</a>
+                        <%if preparation.sys_done%>
+                            <span class="fa fa-check-circle done-icon"></span>
+                        <%end%>
+                    </li>
+                    <%end%>
+                <%end%>
+                </ul>
+            </div>
+            </div>
+            <div class="post-right">
+            </div>
+        </div>
+    <% end %>
+    <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+    </div>
+    </div>

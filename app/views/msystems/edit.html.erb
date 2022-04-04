@@ -1,0 +1,45 @@
+<h1>Edit Opssytem</h1>
+
+
+<!--ココから旧-->
+
+<div class="main posts-new">
+    <div class="container">
+    <%= link_to '戻る', {controller: :msystems, action: :index} %>
+        <h1 class="form-heading">管理システム編集</h1>
+        <%= form_tag({controller: :msystems, action: :update, id: @msystem.id}, {id: "sub",multipart: true}) do %>
+        <div class="form">
+            <div class="form-body">
+            <% @msystem.errors.full_messages.each do |message| %>
+                <div class="form-error">
+                <%= message %>
+                </div>
+            <% end %>
+            <!--有効/無効ステータスで変更の可否分岐-->
+            <%if @msystem.valid_flg == "1"%>
+            <!--オペレーション名(テキスト)-->
+                <p class="item-name">管理システム名</p><p class="ness">*</p>
+                <br>
+                <input type="text" name="msys_name" value="<%= @msystem.msys_name %>">
+                <br>
+                <br>
+                <input type="submit" value="作成">
+            <%else%>
+                <p class="item-name">管理システム名</p><p class="ness">*</p>
+                <br>
+                <input type="text" name="msys_name" value="<%= @msystem.msys_name %>" readonly>
+                <br>
+                <br>
+            <%end%>
+        </div>
+        <% end %>
+        
+    </div>
+        <!--有効/無効ステータスで有効/無効化-->
+        <div class= "link-btn">
+        <%if @msystem.valid_flg == "1"%>
+            <%= link_to("無効化", {controller: :msystems, action: :invalidate,id: @msystem.id }, {method: "post"})%>
+        <%else%>
+            <%= link_to("有効化", {controller: :msystems, action: :validate,id: @msystem.id }, {method: "post"})%>
+        <%end%>
+</div>

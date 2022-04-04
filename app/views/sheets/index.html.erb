@@ -1,0 +1,35 @@
+<div class="main posts-index">
+  <div class="container-set">
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %> 
+  <h1 class="form-heading">作業一覧</h1>
+
+  <% @sheets.each do |sheet| %> 
+      <div class="posts-index-item">
+        <div class="post-left">
+          <div class="post-date">
+            <%= link_to(sheet.duty_date, {controller: :sheets, action: :edit, id: sheet.id }, class: 'post-link') %> 
+            <!--同日付でシート重複時は作成日を赤字で表示-->
+            <%duplicate_sheets = Sheet.where(duty_date: sheet.duty_date).order(created_at: :asc)%>
+            <%if duplicate_sheets[1]%>
+              <div class="caution">
+              作成：<%= sheet.created_at.strftime('%Y-%m-%d %H:%M')%>
+              </div>
+            <%end%>
+
+          </div>
+            <%= link_to("設定", {controller: :sheets, action: :setedit, id: sheet.id },class: "post-set") %>  
+            <% if @current_user.admin_flg == "1" && sheet.predone != nil%>
+              <%= link_to "削除", {controller: :sheets, action: :destroy,id: sheet.id }, method: "post", data: { confirm: "削除しますか？" }%>
+            <%end%>
+          <div class="duty-list">
+          </div>
+        </div>
+        <div class="post-right">
+            
+        </div>
+      </div>
+
+  <% end %> 
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+  </div>
+</div>

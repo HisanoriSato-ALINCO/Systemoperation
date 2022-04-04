@@ -1,0 +1,26 @@
+<div class="main users-new">
+  <div class="container-set">
+    <div class="test">
+    </div>
+    <h1 class="form-heading">ログイン</h1>
+    <div class="form users-form">
+      <div class="form-body">
+        <% if @error_message %>
+          <div class="form-error">
+            <%= @error_message %>
+          </div>
+        <% end %>
+
+          
+
+        <%= form_tag(login_path) do %>
+          <p>社員コード</p>
+          <input name="emp_code" value="<%= @emp_code %>">
+          <br>
+          <p>パスワード</p>
+          <input type="password" name="password" value="<%=@password%>">
+          <input type="submit" value="ログイン">
+        <% end %>
+      </div>
+    </div>
+  </div>

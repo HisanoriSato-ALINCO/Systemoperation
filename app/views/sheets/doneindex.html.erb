@@ -1,0 +1,47 @@
+<div class="main posts-index">
+  <div class="container-set">
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %> 
+  <h1 class="form-heading">完了済一覧</h1>
+  
+  <div class= "link-btn">
+  <!--csv出力ボタン-->
+  <%= link_to "CSV出力",sheets_doneindex_path(format: :csv) %>
+  <!--２年経過シートボタン-->
+  <%= link_to "2年経過シートの削除", {controller: :sheets, action: :destroy_old_sheets,page: "doneindex"}, method: "post", data: { confirm: "削除しますか？" }%>
+  </div>
+  <% @sheets.each do |sheet| %> 
+      <div class="posts-index-item">
+        <div class="post-left">
+          <div class="post-date">
+            <%= link_to(sheet.duty_date, {controller: :sheets, action: :edit, id: sheet.id }, class: 'post-link') %> 
+<%
+=begin%>
+ 
+            <% if sheet.divdone != nil%>区分設定：<%=sheet.divdone%><%end%> 
+            <% if sheet.predone != nil%>事前設定：<%=sheet.predone%><%end%>  
+            <% if sheet.opdone != nil%>作業完了：<%=sheet.opdone%><%end%>   
+<%
+=end%>
+
+
+            <%if sheet.opdone%>
+                <span class="fa fa-check-circle done-icon"></span>
+            <%end%>
+          </div>
+            <%= link_to("設定", {controller: :sheets, action: :setedit, id: sheet.id },class: "post-set") %>  
+            <% if @current_user.admin_flg == "1" && sheet.predone != nil%>
+              <%= link_to "削除", {controller: :sheets, action: :destroy,id: sheet.id ,page: "doneindex"}, method: "post", data: { confirm: "削除しますか？" }%>
+            <%end%>
+          <div class="duty-list">
+          
+          </div>
+        </div>
+        <div class="post-right">
+            
+        </div>
+      </div>
+
+  <% end %> 
+  <%= will_paginate @sheets, :previous_label => ' &lt 前へ', :next_label => '次へ &gt' %>
+  </div>
+</div>

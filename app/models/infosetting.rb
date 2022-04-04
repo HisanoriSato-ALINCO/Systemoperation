@@ -1,0 +1,2 @@
+class Infosetting < ApplicationRecord
+end
